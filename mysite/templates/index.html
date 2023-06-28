@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página Inicial</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>Bem-vindo à Página Inicial</h1>
+    <a href="{% url 'criar_lista' %}" class="button">Criar Lista</a>
+
+    <!-- Outros conteúdos da página -->
+
+    <script src="{% static 'scripts.js' %}"></script>
+</body>
+</html>

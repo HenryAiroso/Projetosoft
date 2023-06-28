@@ -1,0 +1,112 @@
+<style>
+    .delete-button {
+        color: white;
+        background-color: #d50000;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-left: 8px; /* Afastamento do botão dos itens */
+    }
+
+    .delete-button:hover {
+        background-color: #ff1744;
+    }
+    
+    .edit-button {
+        color: white;
+        background-color: #039be5;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 8px; /* Afastamento do botão dos itens */
+    }
+
+    .edit-button:hover {
+        background-color: #03a9f4;
+    }
+</style>
+
+<div class="container">
+    <h2>Criar Lista de Viagem</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-field">
+            <label class="label" for="{{ form.tema.id_for_label }}">Tema:</label>
+            {{ form.tema }}
+        </div>
+        
+        <div id="item-list">
+            <div class="form-field">
+                <input type="text" id="item-input">
+                <button type="button" onclick="addItem()">Adicionar Item</button>
+            </div>
+            
+            {% for item in form.items %}
+                <div class="form-field item-row">
+                    <input type="checkbox">
+                    <input type="text" value="{{ item.value }}" readonly>
+                    <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <button class="button" type="button" onclick="editItems()">Editar Itens</button>
+        <button class="button" type="submit">Resetar Itens</button>
+    </form>
+</div>
+
+<script>
+    function addItem() {
+        var itemInput = document.getElementById("item-input");
+        var itemText = itemInput.value.trim();
+        
+        if (itemText !== "") {
+            var itemList = document.getElementById("item-list");
+            var newItemDiv = document.createElement("div");
+            newItemDiv.classList.add("form-field", "item-row");
+            
+            var checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            newItemDiv.appendChild(checkbox);
+            
+            var itemTextNode = document.createTextNode(itemText);
+            newItemDiv.appendChild(itemTextNode);
+            
+            var deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.classList.add("delete-button");
+            deleteButton.textContent = "X";
+            deleteButton.onclick = function() {
+                deleteItem(this);
+            };
+            newItemDiv.appendChild(deleteButton);
+            
+            itemList.appendChild(newItemDiv);
+            
+            itemInput.value = "";
+        }
+    }
+    
+    function deleteItem(button) {
+        var itemDiv = button.parentNode;
+        itemDiv.parentNode.removeChild(itemDiv);
+    }
+    
+    function editItems() {
+        var itemFields = document.querySelectorAll("#item-list input[type='text']");
+        
+        for (var i = 0; i < itemFields.length; i++) {
+            itemFields[i].readOnly = false;
+        }
+    }
+</script>
