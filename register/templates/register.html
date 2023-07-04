@@ -2,6 +2,70 @@
 <html>
 <head>
   <title>Cadastro</title>
+  <style>
+    body {
+      background-color: #f6f6f6;
+      font-family: "San Francisco", Arial, sans-serif;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    
+    input[type="submit"] {
+      display: block;
+      width: 96%;
+      padding: 12px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    
+    .success-message {
+      text-align: center;
+      color: #007bff;
+      margin-top: 20px;
+    }
+    
+    .error-message {
+      text-align: center;
+      color: #ff0000;
+      margin-top: 20px;
+    }
+  </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
@@ -15,10 +79,13 @@
           url: '/register',
           data: formData,
           success: function(response) {
-            alert('Usuário registrado com sucesso!');
+            $('#registrationForm')[0].reset(); // Limpar o formulário
+            $('#successMessage').show();
+            $('#errorMessage').hide();
           },
           error: function(error) {
-            alert('Ocorreu um erro durante o registro.');
+            $('#successMessage').hide();
+            $('#errorMessage').show();
           }
         });
       });
@@ -30,15 +97,23 @@
   <form id="registrationForm" method="POST">
     {% csrf_token %}
     <label for="username">Nome de usuário:</label>
-    <input type="text" id="username" name="username" required><br><br>
+    <input type="text" id="username" name="username" required>
     
     <label for="password">Senha:</label>
-    <input type="password" id="password" name="password" required><br><br>
+    <input type="password" id="password" name="password" required>
     
     <label for="email">E-mail:</label>
-    <input type="email" id="email" name="email" required><br><br>
+    <input type="email" id="email" name="email" required>
     
     <input type="submit" value="Cadastrar">
   </form>
+  
+  <div id="successMessage" class="success-message" style="display: none;">
+    Usuário registrado com sucesso!
+  </div>
+  
+  <div id="errorMessage" class="error-message" style="display: none;">
+    Ocorreu um erro durante o registro.
+  </div>
 </body>
 </html>

@@ -1,3 +1,5 @@
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     .delete-button {
         color: white;
@@ -16,37 +18,78 @@
     .delete-button:hover {
         background-color: #ff1744;
     }
+
+    .edit-button {
+        color: white;
+        background-color: #039be5;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 8px; /* Afastamento do botão dos itens */
+    }
+
+    .edit-button:hover {
+        background-color: #03a9f4;
+    }
+
+    .font-amazon {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        color: #00529B;
+    }
+
+    .font-amazon-bold {
+        font-family: Arial, sans-serif;
+        font-size: 50px; /* Alterado para 50px */
+        font-weight: bold;
+        color: #00529B;
+    }
+
+    .container-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
 </style>
 
-<div class="container">
-    <h2>Criar Lista de Viagem</h2>
-    
-    <form method="post">
-        {% csrf_token %}
-        
-        <div class="form-field">
-            <label class="label" for="{{ form.tema.id_for_label }}">Tema:</label>
-            {{ form.tema }}
+<div class="container-center">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="font-amazon-bold">Criar Lista de Viagem</h2>
         </div>
         
-        <div id="item-list">
-            <div class="form-field">
-                <input type="text" id="item-input">
-                <button type="button" onclick="addItem()">Adicionar Item</button>
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="label font-amazon" for="{{ form.tema.id_for_label }}">Tema:</label>
+                {{ form.tema }}
             </div>
             
-            {% for item in form.items %}
-                <div class="form-field item-row">
-                    <input type="checkbox">
-                    <input type="text" value="{{ item.value }}" readonly>
-                    <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
+            <div id="item-list" class="my-4">
+                <div class="form-group">
+                    <input type="text" id="item-input" class="form-control">
+                    <button type="button" onclick="addItem()" class="btn btn-primary mt-2">Adicionar Item</button>
                 </div>
-            {% endfor %}
-        </div>
-        
-        <button class="button" type="button" onclick="toggleEdit()">Editar Itens</button>
-        <button class="button" type="submit">Resetar Itens</button>
-    </form>
+                
+                {% for item in form.items %}
+                    <div class="form-group item-row">
+                        <input type="checkbox">
+                        <input type="text" value="{{ item.value }}" readonly class="form-control">
+                        <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <button class="btn btn-primary" type="button" onclick="editItems()">Editar Itens</button>
+            <button class="btn btn-secondary" type="submit">Resetar Itens</button>
+        </form>
+    </div>
 </div>
 
 <script>
@@ -57,7 +100,7 @@
         if (itemText !== "") {
             var itemList = document.getElementById("item-list");
             var newItemDiv = document.createElement("div");
-            newItemDiv.classList.add("form-field", "item-row");
+            newItemDiv.classList.add("form-group", "item-row");
             
             var checkbox = document.createElement("input");
             checkbox.type = "checkbox";
@@ -86,13 +129,11 @@
         itemDiv.parentNode.removeChild(itemDiv);
     }
     
-    function toggleEdit() {
-        var items = document.querySelectorAll("#item-list .item-row input[type='text']");
+    function editItems() {
+        var itemFields = document.querySelectorAll("#item-list input[type='text']");
         
-        for (var i = 0; i < items.length; i++) {
-            items[i].readOnly = !items[i].readOnly;
+        for (var i = 0; i < itemFields.length; i++) {
+            itemFields[i].readOnly = false;
         }
     }
 </script>
-
-
