@@ -1,6 +1,11 @@
+<!DOCTYPE html>
+{% load static %}
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
+<html>
+<head>
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
     .delete-button {
         color: white;
         background-color: #d50000;
@@ -55,85 +60,102 @@
         justify-content: center;
         height: 100vh;
     }
-</style>
 
-<div class="container-center">
+    .logo-container {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo-img {
+        max-width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-center">
     <div class="container">
-        <div class="text-center mb-4">
-            <h2 class="font-amazon-bold">Criar Lista de Viagem</h2>
+        
+      <div class="logo-container">
+        <img src="{% static 'logo.png' %}" alt="Logo do Website" class="logo-img">
+    </div>
+
+      <div class="text-center mb-4">
+        <h2 class="font-amazon-bold">Criar Lista de Viagem</h2>
+      </div>
+      
+      <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label class="label font-amazon" for="{{ form.tema.id_for_label }}">Tema:</label>
+          {{ form.tema }}
         </div>
         
-        <form method="post">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label class="label font-amazon" for="{{ form.tema.id_for_label }}">Tema:</label>
-                {{ form.tema }}
+        <div id="item-list" class="my-4">
+          <div class="form-group">
+            <input type="text" id="item-input" class="form-control">
+            <button type="button" onclick="addItem()" class="btn btn-primary mt-2">Adicionar Item</button>
+          </div>
+          
+          {% for item in form.items %}
+            <div class="form-group item-row">
+              <input type="checkbox">
+              <input type="text" value="{{ item.value }}" readonly class="form-control">
+              <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
             </div>
-            
-            <div id="item-list" class="my-4">
-                <div class="form-group">
-                    <input type="text" id="item-input" class="form-control">
-                    <button type="button" onclick="addItem()" class="btn btn-primary mt-2">Adicionar Item</button>
-                </div>
-                
-                {% for item in form.items %}
-                    <div class="form-group item-row">
-                        <input type="checkbox">
-                        <input type="text" value="{{ item.value }}" readonly class="form-control">
-                        <button type="button" class="delete-button" onclick="deleteItem(this)">X</button>
-                    </div>
-                {% endfor %}
-            </div>
-            
-            <button class="btn btn-primary" type="button" onclick="editItems()">Editar Itens</button>
-            <button class="btn btn-secondary" type="submit">Resetar Itens</button>
-        </form>
-    </div>
-</div>
-
-<script>
-    function addItem() {
-        var itemInput = document.getElementById("item-input");
-        var itemText = itemInput.value.trim();
+          {% endfor %}
+        </div>
         
-        if (itemText !== "") {
-            var itemList = document.getElementById("item-list");
-            var newItemDiv = document.createElement("div");
-            newItemDiv.classList.add("form-group", "item-row");
-            
-            var checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            newItemDiv.appendChild(checkbox);
-            
-            var itemTextNode = document.createTextNode(itemText);
-            newItemDiv.appendChild(itemTextNode);
-            
-            var deleteButton = document.createElement("button");
-            deleteButton.type = "button";
-            deleteButton.classList.add("delete-button");
-            deleteButton.textContent = "X";
-            deleteButton.onclick = function() {
-                deleteItem(this);
-            };
-            newItemDiv.appendChild(deleteButton);
-            
-            itemList.appendChild(newItemDiv);
-            
-            itemInput.value = "";
-        }
+        <button class="btn btn-primary" type="button" onclick="editItems()">Editar Itens</button>
+        <button class="btn btn-secondary" type="submit">Resetar Itens</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function addItem() {
+      var itemInput = document.getElementById("item-input");
+      var itemText = itemInput.value.trim();
+      
+      if (itemText !== "") {
+        var itemList = document.getElementById("item-list");
+        var newItemDiv = document.createElement("div");
+        newItemDiv.classList.add("form-group", "item-row");
+        
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        newItemDiv.appendChild(checkbox);
+        
+        var itemTextNode = document.createTextNode(itemText);
+        newItemDiv.appendChild(itemTextNode);
+        
+        var deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.classList.add("delete-button");
+        deleteButton.textContent = "X";
+        deleteButton.onclick = function() {
+          deleteItem(this);
+        };
+        newItemDiv.appendChild(deleteButton);
+        
+        itemList.appendChild(newItemDiv);
+        
+        itemInput.value = "";
+      }
     }
     
     function deleteItem(button) {
-        var itemDiv = button.parentNode;
-        itemDiv.parentNode.removeChild(itemDiv);
+      var itemDiv = button.parentNode;
+      itemDiv.parentNode.removeChild(itemDiv);
     }
     
     function editItems() {
-        var itemFields = document.querySelectorAll("#item-list input[type='text']");
-        
-        for (var i = 0; i < itemFields.length; i++) {
-            itemFields[i].readOnly = false;
-        }
+      var itemFields = document.querySelectorAll("#item-list input[type='text']");
+      
+      for (var i = 0; i < itemFields.length; i++) {
+        itemFields[i].readOnly = false;
+      }
     }
-</script>
+  </script>
+</body>
+</html>
