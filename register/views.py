@@ -1,14 +1,19 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')  # Redirecionar para a página inicial após o registro
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        
+        # Crie um novo usuário
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.save()
+        
+        return HttpResponse('Registro realizado com sucesso!')
     else:
-        form = UserCreationForm()
-    
-    return render(request, 'register/register.html', {'form': form})
+        return render(request, 'register.html')
 

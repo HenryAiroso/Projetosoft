@@ -16,22 +16,6 @@
     .delete-button:hover {
         background-color: #ff1744;
     }
-    
-    .edit-button {
-        color: white;
-        background-color: #039be5;
-        border: none;
-        padding: 0;
-        margin: 0;
-        font-size: 14px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 8px; /* Afastamento do botão dos itens */
-    }
-
-    .edit-button:hover {
-        background-color: #03a9f4;
-    }
 </style>
 
 <div class="container">
@@ -60,7 +44,7 @@
             {% endfor %}
         </div>
         
-        <button class="button" type="button" onclick="editItems()">Editar Itens</button>
+        <button class="button" type="button" onclick="toggleEdit()">Editar Itens</button>
         <button class="button" type="submit">Resetar Itens</button>
     </form>
 </div>
@@ -102,11 +86,13 @@
         itemDiv.parentNode.removeChild(itemDiv);
     }
     
-    function editItems() {
-        var itemFields = document.querySelectorAll("#item-list input[type='text']");
+    function toggleEdit() {
+        var items = document.querySelectorAll("#item-list .item-row input[type='text']");
         
-        for (var i = 0; i < itemFields.length; i++) {
-            itemFields[i].readOnly = false;
+        for (var i = 0; i < items.length; i++) {
+            items[i].readOnly = !items[i].readOnly;
         }
     }
 </script>
+
+

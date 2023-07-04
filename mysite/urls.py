@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path
 from lista import views
 from register import views as register_views
+from django.urls import include
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.criar_lista, name='criar_lista'),
     path('register/', register_views.register, name='register'),
-
 ]

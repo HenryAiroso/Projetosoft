@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registro de Usuário</title>
+  <title>Cadastro</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#registrationForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+        
+        // Enviar os dados do formulário para o servidor
+        $.ajax({
+          type: 'POST',
+          url: '/register',
+          data: formData,
+          success: function(response) {
+            alert('Usuário registrado com sucesso!');
+          },
+          error: function(error) {
+            alert('Ocorreu um erro durante o registro.');
+          }
+        });
+      });
+    });
+  </script>
 </head>
 <body>
-    <h2>Registro de Usuário</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Registrar</button>
-    </form>
+  <h1>Cadastro de Usuário</h1>
+  <form id="registrationForm" method="POST">
+    {% csrf_token %}
+    <label for="username">Nome de usuário:</label>
+    <input type="text" id="username" name="username" required><br><br>
+    
+    <label for="password">Senha:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required><br><br>
+    
+    <input type="submit" value="Cadastrar">
+  </form>
 </body>
 </html>
